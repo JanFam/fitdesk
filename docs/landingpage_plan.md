@@ -1,138 +1,104 @@
 # FitDesk Landing Pages — Implementation Plan
 
+## Status: ✅ COMPLETE
+
+All 7 landing pages are live and collecting waitlist signups.
+
+## Live URLs
+
+- **Production:** `https://fitdesk-xi.vercel.app` (aliased from `fitdesk-cuk91bnz7-janfams-projects.vercel.app`)
+- **GitHub:** `https://github.com/JanFam/fitdesk`
+
+---
+
 ## Overview
-Build 7 persona-specific landing pages (1 generic + 6 persona variants) on a single Next.js app deployed to `fitdesk.com`. All pages share the same structure — only the hero headline and subheadline differ per persona. Waitlist emails stored in Supabase.
+
+Built 7 persona-specific landing pages (1 generic + 6 persona variants) on a single Next.js app deployed to Vercel. All pages share the same structure — only the hero headline and subheadline differ per persona. Waitlist emails stored in Supabase with persona tracking.
 
 ## Stack
-- **Next.js 14+** — App Router, TypeScript, Tailwind CSS
-- **Supabase** — free tier, hosts the `waitlist` table
-- **Vercel** — deploy target
+
+- **Next.js 16** (App Router) + TypeScript + Tailwind CSS
+- **Supabase** — `waitlist` table, free tier
+- **Vercel** — deployed and aliased to `fitdesk-xi.vercel.app`
 - **Fonts** — Limelight (display) + DM Sans (body) via `next/font/google`
 
-## Supabase Credentials
+## Supabase
+
 - Project URL: `https://ivjrqeilpbllstobdqkl.supabase.co`
-- Service role key: `***hidden***` (stored in `.env.local`)
+- `waitlist` table: `id` (uuid PK), `email` (text UNIQUE), `source` (text), `created_at` (timestamptz)
+- Service role key hardcoded in `app/api/waitlist/route.ts` — uses Supabase REST API directly via `fetch`
 
 ---
 
 ## Folder Structure
+
 ```
 FitDesk/
 ├── app/
-│   ├── layout.tsx                    ← Root layout (fonts, nav, footer)
+│   ├── layout.tsx                    ← Root layout: fonts, Nav, Footer
 │   ├── globals.css                   ← CSS vars + Tailwind directives
 │   ├── page.tsx                      ← / (generic hero)
-│   ├── overwhelmed/page.tsx
-│   ├── check-in/page.tsx
-│   ├── billing/page.tsx
-│   ├── scale/page.tsx
-│   ├── simplicity/page.tsx
-│   ├── retention/page.tsx
-│   └── api/
-│       └── waitlist/route.ts         ← POST: store email in Supabase
+│   ├── overwhelmed/page.tsx           ← Persona 1
+│   ├── check-in/page.tsx              ← Persona 2
+│   ├── billing/page.tsx                ← Persona 3
+│   ├── scale/page.tsx                  ← Persona 4
+│   ├── simplicity/page.tsx             ← Persona 5
+│   ├── retention/page.tsx              ← Persona 6
+│   └── api/waitlist/route.ts           ← POST: insert email into Supabase
 ├── components/
-│   ├── nav.tsx
-│   ├── footer.tsx
-│   ├── hero.tsx                      ← accepts headline + subheadline props
-│   ├── problem.tsx
-│   ├── solution.tsx
-│   ├── alternatives.tsx
-│   ├── pricing.tsx
-│   ├── social-proof.tsx
-│   ├── final-cta.tsx                 ← accepts headline + subheadline props
-│   └── waitlist-form.tsx             ← email input → POST /api/waitlist
+│   ├── nav.tsx                        ← Sticky top bar
+│   ├── footer.tsx                     ← Dark footer
+│   ├── hero.tsx                       ← Props: headline, subheadline, source
+│   ├── problem.tsx                    ← Static: 5 pain points
+│   ├── solution.tsx                   ← Static: 3 feature cards
+│   ├── alternatives.tsx               ← Static: 4 alternatives
+│   ├── pricing.tsx                    ← Static: 3 tiers
+│   ├── social-proof.tsx              ← Static: 3 testimonials + 500+ counter
+│   ├── final-cta.tsx                  ← Props: headline, subheadline
+│   └── waitlist-form.tsx              ← Client: email → POST /api/waitlist
 ├── lib/
-│   └── supabase.ts                   ← Supabase client (server-side)
-├── styles/
-│   └── globals.css                   ← CSS vars (brand tokens) + Tailwind
-├── docs/                             ← Existing documentation (untouched)
+│   └── supabase.ts                    ← Supabase client (kept for future use)
 ├── public/
-│   └── fitdesk-landing.html           ← Original HTML (archived reference)
-├── AGENTS.md                          ← Untouched
-└── .env.local                         ← Contains real Supabase keys (gitignored)
+│   └── fitdesk-landing.html            ← Original Open Design HTML (archived)
+├── docs/
+│   ├── PROGRESS.md
+│   ├── GOALS.md
+│   ├── ARCHITECTURE.md
+│   └── landingpage_plan.md             ← This file
+└── .vercel/
+    ├── project.json                   ← Vercel project link
+    └── .env                           ← Env vars (gitignored, uploaded at deploy time)
 ```
 
 ---
 
-## Stage 1 — Foundation
+## Implementation Notes
 
-1. Move `fitdesk-landing.html` → `public/fitdesk-landing.html`
-2. Create `docs/PLAN.md` (this file)
-3. Create `lib/supabase.ts` — server-side Supabase client using service role key
-4. Create `.env.local` with Supabase credentials
-5. Create `app/globals.css` — CSS variables matching brand tokens from original HTML
-6. Create `app/layout.tsx` — root layout with Limelight + DM Sans fonts, Nav + Footer
-7. Run `npm run build` — must compile clean
+### Waitlist API
 
-### Supabase Table (via REST API)
-```sql
-CREATE TABLE waitlist (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  source TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE UNIQUE INDEX waitlist_email_idx ON waitlist(email);
-```
+`POST /api/waitlist` — request body `{ email, source }`. Uses Supabase REST API directly via `fetch` with service role key. This avoids Vercel runtime env var issues (`.vercel/.env` vars only available during build, not at request time).
+
+### Components
+
+All shared components (`hero`, `problem`, `solution`, etc.) are used on every page. Only `hero` and `final-cta` take persona-specific props (headline + subheadline). All other sections are identical across all 7 pages.
+
+### Client Components
+
+Four components use `'use client'` due to event handlers (hover effects):
+- `problem.tsx`
+- `solution.tsx`
+- `alternatives.tsx`
+- `social-proof.tsx`
 
 ---
 
-## Stage 2 — Shared Components
+## Remaining Tasks
 
-All components are built once and reused on every page.
-
-- `components/nav.tsx` — Sticky top bar: FitDesk logo + anchor links
-- `components/footer.tsx` — Dark footer: logo + Privacy/Terms/Contact
-- `components/waitlist-form.tsx` — Email input → POST /api/waitlist, loading/success/error states
-- `components/hero.tsx` — Props: `headline`, `subheadline`. Eyebrow + h1 + p + WaitlistForm
-- `components/problem.tsx` — Static, 5 pain points
-- `components/solution.tsx` — Static, 3 feature cards
-- `components/alternatives.tsx` — Static, 4 alternatives
-- `components/pricing.tsx` — Static, 3 tiers (Starter $29, Pro $49 featured, Scale $79)
-- `components/social-proof.tsx` — Static, 3 testimonials + 500+ counter
-- `components/final-cta.tsx` — Props: `headline`, `subheadline`. Second email capture.
+1. Add custom domain `fitdesk.com` in Vercel dashboard
+2. Set up DNS records as Vercel instructs
+3. Install Vercel GitHub app for PR preview deployments
+4. Customer interviews (required before product development)
 
 ---
 
-## Stage 3 — API Route
-
-**`app/api/waitlist/route.ts` (POST only):**
-1. Parse `{ email: string, source?: string }`
-2. Validate email format → 400 if invalid
-3. Insert into Supabase `waitlist` table
-4. Duplicate email → silent 200 (no error to user)
-5. Supabase error → 500
-
----
-
-## Stage 4 — Landing Pages
-
-| Page | Headline | Subheadline |
-|------|----------|-------------|
-| `/` | "You're not a personal trainer anymore." | "You're running an admin business that occasionally involves coaching. FitDesk fixes that — program delivery, check-ins, billing, all in one place. No more switching between 5 tools." |
-| `/overwhelmed` | "You're not a personal trainer anymore." | "You're running an admin business that occasionally involves coaching. FitDesk fixes that — program delivery, check-ins, billing, all in one place. No more switching between 5 tools." |
-| `/check-in` | "Monday dread is optional." | "FitDesk handles the check-in backlog so you don't have to. Know who's falling off before they've already quit." |
-| `/billing` | "Stop chasing payments." | "FitDesk tracks who's paid, automates reminders, and ends the awkward conversations. Get paid without the hassle." |
-| `/scale` | "Same tool at 10 clients as at 50." | "FitDesk grows with you. No tier jumps, no feature gates, no switching tools every 6 months. Just one price." |
-| `/simplicity` | "Your clients will actually use this." | "As easy as WhatsApp for your clients. No app downloads, no confusing dashboards. Just results." |
-| `/retention` | "Don't lose clients to silence." | "FitDesk's check-in system catches drop-offs early. Reach out before they've already quit." |
-
----
-
-## Stage 5 — Deploy to Vercel
-
-1. Push code to GitHub
-2. Connect repo to Vercel
-3. Add env vars: `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
-4. Deploy → verify `fitdesk.com` loads
-5. Add custom domain in Vercel settings
-
----
-
-## Stage 6 — Verify
-
-1. All 7 pages load without errors
-2. Email submission creates a row in Supabase `waitlist` table
-3. Duplicate email doesn't error
-4. Mobile responsive (DevTools check)
-5. `npm run build` passes clean
+Last updated: 2026-05-14

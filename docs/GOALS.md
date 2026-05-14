@@ -30,16 +30,18 @@ Replace 5 disconnected tools with one workspace built for solo coaches. No enter
 
 Tiered subscription:
 - Starter: $29/mo (up to 10 clients)
-- Pro: $49/mo (up to 30 clients)
+- Pro: $49/mo (up to 30 clients) — featured
 - Scale: $79/mo (up to 50 clients)
 
 ## Current Stage
 
-**Pre-product.** Currently validating demand via waitlist landing page before writing code.
+**Demand validation live.** Landing pages deployed at `https://fitdesk-xi.vercel.app`. Collecting waitlist signups via Supabase. Tracking which persona page each signup came from (`source` field in `waitlist` table).
+
+Next: customer interviews to determine the product wedge.
 
 ## Key Risks
 
-1. **Customer research gap**: Creator hasn't done 20 customer interviews yet — this is the critical validation step before building
+1. **Customer research gap**: Creator hasn't done 20 customer interviews yet — this is the critical validation step before building product
 2. **Demand uncertainty**: "Coaches complain publicly" ≠ "coaches will pay $39/mo" — waitlist validates interest, not willingness to pay
 3. **Content marketing dependency**: Organic social is the primary acquisition channel — untested for this specific audience
 
