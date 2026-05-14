@@ -84,8 +84,8 @@ fitdesk.com/retention      ← Persona 6 (Ghosting/Retention)
 
 ## Blockers
 
-- No customer interviews completed yet — required before building product
-- Custom domain not yet connected
+- **Domain not registered** — `fitdesk.com` needs to be purchased from a registrar (Cloudflare recommended). Not blocking current work — the Vercel URL (`fitdesk-xi.vercel.app`) works fine for validation.
+- No customer interviews completed yet — required before product development starts
 
 ---
 
