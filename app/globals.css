@@ -1,26 +1,177 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #EA580B;
+  --primary-dark: #c24a09;
+  --secondary: #F59E0B;
+  --success: #16A34A;
+  --warning: #D97706;
+  --bg: #FFEDD5;
+  --surface: #FDBA74;
+  --surface-light: #FED7AA;
+  --text: #1C1917;
+  --text-muted: #57534E;
+  --white: #FFFFFF;
+  --shadow-soft: 0 2px 8px rgba(28, 25, 23, 0.06), 0 8px 32px rgba(28, 25, 23, 0.04);
+  --shadow-lift: 0 4px 16px rgba(28, 25, 23, 0.08), 0 16px 48px rgba(28, 25, 23, 0.06);
+  --shadow-card: 0 2px 12px rgba(28, 25, 23, 0.06), 0 8px 24px rgba(253, 186, 116, 0.18);
+  --shadow-glow: 0 0 80px rgba(253, 186, 116, 0.35);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-secondary: var(--secondary);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-light: var(--surface-light);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-white: var(--white);
+  --font-display: var(--font-limelight);
+  --font-body: var(--font-dm-sans);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-glow--hero {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(ellipse, rgba(253, 186, 116, 0.45) 0%, rgba(253, 186, 116, 0) 70%);
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ambient-glow--solution {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0) 70%);
+  bottom: 10%;
+  right: -100px;
+}
+
+.ambient-glow--pricing {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(234, 88, 11, 0.12) 0%, rgba(234, 88, 11, 0) 70%);
+  top: 40%;
+  left: -150px;
+}
+
+.ambient-glow--final {
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(253, 186, 116, 0.35) 0%, rgba(253, 186, 116, 0) 65%);
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.container--narrow {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.email-form {
+  display: flex;
+  gap: 12px;
+  max-width: 480px;
+}
+
+.email-form__input {
+  flex: 1;
+  padding: 14px 18px;
+  font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.2s ease;
+  color: var(--text);
+}
+
+.email-form__input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lift), 0 0 0 4px rgba(234, 88, 11, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.email-form__input::placeholder {
+  color: var(--text-muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn--primary {
+  background: var(--primary);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(234, 88, 11, 0.35), 0 2px 8px rgba(234, 88, 11, 0.2);
+}
+
+.btn--secondary {
+  background: var(--white);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.btn--secondary:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+@media (max-width: 480px) {
+  .email-form {
+    width: 100%;
+  }
 }

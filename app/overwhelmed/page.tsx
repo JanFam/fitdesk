@@ -6,13 +6,13 @@ import Pricing from '@/components/pricing'
 import SocialProof from '@/components/social-proof'
 import FinalCTA from '@/components/final-cta'
 
-export default function Home() {
+export default function OverwhelmedPage() {
   return (
     <>
       <Hero
         headline="You're not a personal trainer anymore."
         subheadline="You're running an admin business that occasionally involves coaching. FitDesk fixes that — program delivery, check-ins, billing, all in one place. No more switching between 5 tools."
-        source="generic"
+        source="overwhelmed"
       />
       <Problem />
       <Solution />
@@ -22,7 +22,7 @@ export default function Home() {
       <FinalCTA
         headline="Stop running your business from a spreadsheet."
         subheadline="2 weeks free when we launch. No credit card required."
-        source="generic"
+        source="overwhelmed"
       />
     </>
   )

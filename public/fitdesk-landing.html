@@ -1,0 +1,1107 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitDesk — One Workspace for Solo Fitness Coaches</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Limelight&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #EA580B;
+      --primary-dark: #c24a09;
+      --secondary: #F59E0B;
+      --success: #16A34A;
+      --warning: #D97706;
+      --bg: #FFEDD5;
+      --surface: #FDBA74;
+      --surface-light: #FED7AA;
+      --text: #1C1917;
+      --text-muted: #57534E;
+      --white: #FFFFFF;
+      --shadow-soft: 0 2px 8px rgba(28, 25, 23, 0.06), 0 8px 32px rgba(28, 25, 23, 0.04);
+      --shadow-lift: 0 4px 16px rgba(28, 25, 23, 0.08), 0 16px 48px rgba(28, 25, 23, 0.06);
+      --shadow-card: 0 2px 12px rgba(28, 25, 23, 0.06), 0 8px 24px rgba(253, 186, 116, 0.18);
+      --shadow-glow: 0 0 80px rgba(253, 186, 116, 0.35);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --font-display: 'Limelight', Georgia, serif;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow--hero {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(ellipse, rgba(253, 186, 116, 0.45) 0%, rgba(253, 186, 116, 0) 70%);
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .ambient-glow--solution {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0) 70%);
+      bottom: 10%;
+      right: -100px;
+    }
+
+    .ambient-glow--pricing {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(234, 88, 11, 0.12) 0%, rgba(234, 88, 11, 0) 70%);
+      top: 40%;
+      left: -150px;
+    }
+
+    .ambient-glow--final {
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(253, 186, 116, 0.35) 0%, rgba(253, 186, 116, 0) 65%);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .container--narrow {
+      max-width: 800px;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: clamp(1rem, 1.5vw, 1.125rem);
+      color: var(--text-muted);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 28px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn--primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .btn--primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(234, 88, 11, 0.35), 0 2px 8px rgba(234, 88, 11, 0.2);
+    }
+
+    .btn--secondary {
+      background: var(--white);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn--secondary:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .email-form {
+      display: flex;
+      gap: 12px;
+      max-width: 480px;
+    }
+
+    .email-form__input {
+      flex: 1;
+      padding: 14px 18px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      border: 2px solid transparent;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-soft);
+      transition: all 0.2s ease;
+    }
+
+    .email-form__input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-lift), 0 0 0 4px rgba(234, 88, 11, 0.1);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .email-form__input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 80px 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(253, 186, 116, 0.5) 0%, #FFEDD5 60%),
+                  linear-gradient(180deg, var(--bg) 0%, var(--surface-light) 100%);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero__content {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .hero__eyebrow {
+      display: inline-block;
+      padding: 6px 16px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: rgba(234, 88, 11, 0.08);
+      border: 1px solid rgba(234, 88, 11, 0.15);
+      border-radius: 50px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero__title {
+      margin-bottom: 24px;
+    }
+
+    .hero__subtitle {
+      font-size: clamp(1.125rem, 2vw, 1.375rem);
+      margin-bottom: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero__form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .hero__note {
+      font-size: 0.875rem;
+      margin-top: 16px;
+    }
+
+    @media (min-width: 600px) {
+      .hero__form {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+
+    /* ===== PROBLEM ===== */
+    .problem {
+      padding: 100px 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.7) 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .problem__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .problem__list {
+      display: grid;
+      gap: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .problem__item {
+      display: flex;
+      gap: 20px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(255,237,213,0.9) 0%, rgba(255,237,213,0.7) 100%);
+      backdrop-filter: blur(4px);
+      border-radius: var(--radius-lg);
+      border-left: 4px solid var(--primary);
+      box-shadow: var(--shadow-card);
+      transition: all 0.25s ease;
+    }
+
+    .problem__item:hover {
+      box-shadow: var(--shadow-lift);
+      transform: translateX(4px);
+    }
+
+    .problem__icon {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .problem__icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--white);
+    }
+
+    .problem__text {
+      font-size: 1.0625rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ===== SOLUTION ===== */
+    .solution {
+      padding: 100px 0;
+      background: linear-gradient(160deg, rgba(255,237,213,0.6) 0%, rgba(255,237,213,0.95) 50%, rgba(255,237,213,0.6) 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .solution__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .solution__tagline {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-top: 16px;
+    }
+
+    .solution__grid {
+      display: grid;
+      gap: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .solution__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .feature-card {
+      padding: 32px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lift), var(--shadow-glow);
+    }
+
+    .feature-card__icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      border-radius: var(--radius-lg);
+    }
+
+    .feature-card__icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--white);
+    }
+
+    .feature-card__title {
+      font-family: var(--font-display);
+      font-size: 1.375rem;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .feature-card__text {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* ===== ALTERNATIVES ===== */
+    .alternatives {
+      padding: 100px 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.95) 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .alternatives__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .alternatives__list {
+      max-width: 700px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .alternative-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(255,237,213,0.85) 0%, rgba(255,237,213,0.65) 100%);
+      backdrop-filter: blur(6px);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      transition: all 0.25s ease;
+    }
+
+    .alternative-item:hover {
+      box-shadow: var(--shadow-lift);
+      transform: translateX(3px);
+    }
+
+    .alternative-item__icon {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      margin-top: 2px;
+    }
+
+    .alternative-item__icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--warning);
+    }
+
+    .alternative-item__text {
+      font-size: 1.0625rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ===== PRICING ===== */
+    .pricing {
+      padding: 100px 0;
+      background: linear-gradient(200deg, rgba(255,237,213,0.5) 0%, rgba(255,237,213,0.9) 40%, rgba(255,237,213,0.6) 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .pricing__header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .pricing__tagline {
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    .pricing__grid {
+      display: grid;
+      gap: 24px;
+      max-width: 1000px;
+      margin: 48px auto 0;
+    }
+
+    @media (min-width: 768px) {
+      .pricing__grid {
+        grid-template-columns: repeat(3, 1fr);
+        align-items: stretch;
+      }
+    }
+
+    .pricing-card {
+      padding: 32px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.88) 100%);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lift);
+    }
+
+    .pricing-card--featured {
+      background: linear-gradient(160deg, rgba(234, 88, 11, 0.95) 0%, rgba(200, 65, 10, 0.92) 100%);
+      color: var(--white);
+      box-shadow: var(--shadow-lift), 0 0 60px rgba(234, 88, 11, 0.2);
+    }
+
+    .pricing-card--featured .pricing-card__name,
+    .pricing-card--featured .pricing-card__price,
+    .pricing-card--featured .pricing-card__description {
+      color: var(--white);
+    }
+
+    .pricing-card--featured .pricing-card__features li {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .pricing-card__badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--secondary);
+      color: var(--text);
+      border-radius: 50px;
+    }
+
+    .pricing-card__name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .pricing-card__price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .pricing-card__price span {
+      font-size: 1rem;
+      font-weight: 400;
+      opacity: 0.7;
+    }
+
+    .pricing-card__description {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      margin: 12px 0 24px;
+    }
+
+    .pricing-card__features {
+      list-style: none;
+      margin-bottom: 32px;
+      flex-grow: 1;
+    }
+
+    .pricing-card__features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+    }
+
+    .pricing-card__features li svg {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
+      stroke: var(--success);
+    }
+
+    .pricing-card--featured .pricing-card__features li svg {
+      stroke: var(--white);
+    }
+
+    .pricing-card__btn {
+      width: 100%;
+    }
+
+    .pricing-card--featured .pricing-card__btn {
+      background: var(--white);
+      color: var(--primary);
+    }
+
+    .pricing-card--featured .pricing-card__btn:hover {
+      background: var(--bg);
+    }
+
+    .pricing__note {
+      text-align: center;
+      margin-top: 32px;
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== SOCIAL PROOF ===== */
+    .social-proof {
+      padding: 100px 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.7) 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .social-proof__header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .social-proof__grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .social-proof__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .testimonial {
+      padding: 28px;
+      background: linear-gradient(135deg, rgba(255,237,213,0.9) 0%, rgba(255,237,213,0.7) 100%);
+      backdrop-filter: blur(6px);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      transition: all 0.25s ease;
+    }
+
+    .testimonial:hover {
+      box-shadow: var(--shadow-lift);
+      transform: translateY(-3px);
+    }
+
+    .testimonial__quote {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .testimonial__quote::before {
+      content: '"';
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--primary);
+      opacity: 0.3;
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      line-height: 1;
+    }
+
+    .testimonial__author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(234, 88, 11, 0.85) 0%, rgba(245, 158, 11, 0.75) 100%);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--white);
+      font-size: 0.875rem;
+      box-shadow: 0 2px 8px rgba(234, 88, 11, 0.25);
+    }
+
+    .testimonial__name {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--text);
+    }
+
+    .testimonial__role {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .social-proof__counter {
+      text-align: center;
+      margin-top: 48px;
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(234, 88, 11, 0.9) 0%, rgba(245, 158, 11, 0.85) 100%);
+      border-radius: var(--radius-lg);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 20px rgba(234, 88, 11, 0.25), 0 8px 40px rgba(234, 88, 11, 0.15);
+    }
+
+    .social-proof__counter-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--white);
+      text-shadow: 0 2px 12px rgba(234, 88, 11, 0.4);
+    }
+
+    .social-proof__counter-text {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.9);
+      margin-top: 4px;
+    }
+
+    /* ===== FINAL CTA ===== */
+    .final-cta {
+      padding: 100px 0;
+      background: linear-gradient(180deg, rgba(254, 215, 170, 0.5) 0%, rgba(255, 237, 213, 0.95) 50%, rgba(255, 237, 213, 1) 100%);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .final-cta__content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .final-cta__title {
+      margin-bottom: 16px;
+    }
+
+    .final-cta__subtitle {
+      font-size: 1.125rem;
+      margin-bottom: 40px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 48px 0;
+      background: linear-gradient(180deg, #1C1917 0%, #0f0e0d 100%);
+      color: var(--white);
+    }
+
+    .footer__inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      text-align: center;
+    }
+
+    @media (min-width: 600px) {
+      .footer__inner {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+      }
+    }
+
+    .footer__logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--white);
+    }
+
+    .footer__links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer__link {
+      font-size: 0.9375rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer__link:hover {
+      color: var(--white);
+    }
+
+    /* ===== RESPONSIVE ADJUSTMENTS ===== */
+    @media (max-width: 480px) {
+      .email-form {
+        width: 100%;
+      }
+      
+      .problem__item {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .pricing-card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow ambient-glow--hero" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow--solution" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow--pricing" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow--final" aria-hidden="true"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__content">
+        <span class="hero__eyebrow">Early Access — Launching Soon</span>
+        <h1 class="hero__title">You're not a personal trainer anymore.</h1>
+        <p class="hero__subtitle">You're running an admin business that occasionally involves coaching. FitDesk fixes that — program delivery, check-ins, billing, all in one place. No more switching between 5 tools.</p>
+        <form class="hero__form email-form" onsubmit="event.preventDefault(); alert('Thanks for joining the waitlist!');">
+          <input type="email" class="email-form__input" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn--primary">Join the waitlist</button>
+        </form>
+        <p class="hero__note">2 weeks free when we launch. No credit card required.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem">
+    <div class="container">
+      <div class="problem__header">
+        <h2>Sound familiar?</h2>
+      </div>
+      <div class="problem__list">
+        <div class="problem__item">
+          <div class="problem__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
+          </div>
+          <p class="problem__text">Monday morning: 15 unread check-ins to review. You haven't had coffee yet.</p>
+        </div>
+        <div class="problem__item">
+          <div class="problem__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <p class="problem__text">You're texting clients reminders about workouts they were supposed to submit.</p>
+        </div>
+        <div class="problem__item">
+          <div class="problem__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+          </div>
+          <p class="problem__text">Your client paid through PayPal but you're not sure if they actually paid.</p>
+        </div>
+        <div class="problem__item">
+          <div class="problem__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+          </div>
+          <p class="problem__text">You spent 45 minutes building a workout program in a Google Doc. Again.</p>
+        </div>
+        <div class="problem__item">
+          <div class="problem__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </div>
+          <p class="problem__text">You've got client notes in your texts, your email, and three different spreadsheets.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="solution">
+    <div class="container">
+      <div class="solution__header">
+        <h2>Everything In One Place</h2>
+        <p class="solution__tagline">One place for everything you already do. Just less chaos.</p>
+      </div>
+      <div class="solution__grid">
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+          </div>
+          <h3 class="feature-card__title">Program Delivery</h3>
+          <p class="feature-card__text">Build and send workouts in minutes. Clients get notified, track progress, never lose a file again.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <h3 class="feature-card__title">Check-ins & Accountability</h3>
+          <p class="feature-card__text">Weekly check-ins clients actually submit. You see who's falling off before they've already quit.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-card__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          </div>
+          <h3 class="feature-card__title">Payments & Billing</h3>
+          <p class="feature-card__text">Track who's paid, automate reminders, no more awkward payment conversations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALTERNATIVES -->
+  <section class="alternatives">
+    <div class="container">
+      <div class="alternatives__header">
+        <h2>You tried the other tools.</h2>
+      </div>
+      <div class="alternatives__list">
+        <div class="alternative-item">
+          <div class="alternative-item__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </div>
+          <p class="alternative-item__text">Trainerize is built for gyms. You pay for features you'll never use.</p>
+        </div>
+        <div class="alternative-item">
+          <div class="alternative-item__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </div>
+          <p class="alternative-item__text">Sheets + WhatsApp works until 10 clients. Then it falls apart.</p>
+        </div>
+        <div class="alternative-item">
+          <div class="alternative-item__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </div>
+          <p class="alternative-item__text">Switching tools every 6 months because you outgrew the last one gets old.</p>
+        </div>
+        <div class="alternative-item">
+          <div class="alternative-item__icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <p class="alternative-item__text">FitDesk is built for solo coaches. Same price at 10 clients as at 50.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing">
+    <div class="container">
+      <div class="pricing__header">
+        <h2>Pricing</h2>
+        <p class="pricing__tagline">No hidden fees. No scale ceiling.</p>
+      </div>
+      <div class="pricing__grid">
+        <div class="pricing-card">
+          <span class="pricing-card__name">Starter</span>
+          <div class="pricing-card__price">$29<span>/mo</span></div>
+          <p class="pricing-card__description">Up to 10 clients</p>
+          <ul class="pricing-card__features">
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Everything you need to start
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Program delivery
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Basic check-ins
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Payment tracking
+            </li>
+          </ul>
+          <button class="btn btn--secondary pricing-card__btn">Get started</button>
+        </div>
+        <div class="pricing-card pricing-card--featured">
+          <span class="pricing-card__badge">Most Popular</span>
+          <span class="pricing-card__name">Pro</span>
+          <div class="pricing-card__price">$49<span>/mo</span></div>
+          <p class="pricing-card__description">Up to 30 clients</p>
+          <ul class="pricing-card__features">
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Everything in Starter
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Automated reminders
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Advanced analytics
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Priority support
+            </li>
+          </ul>
+          <button class="btn pricing-card__btn">Get started</button>
+        </div>
+        <div class="pricing-card">
+          <span class="pricing-card__name">Scale</span>
+          <div class="pricing-card__price">$79<span>/mo</span></div>
+          <p class="pricing-card__description">Up to 50 clients</p>
+          <ul class="pricing-card__features">
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Everything in Pro
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Full automation
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              Custom check-in templates
+            </li>
+            <li>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+              White-label options
+            </li>
+          </ul>
+          <button class="btn btn--secondary pricing-card__btn">Get started</button>
+        </div>
+      </div>
+      <p class="pricing__note">No add-ons. No upsells. One price.</p>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="social-proof">
+    <div class="container">
+      <div class="social-proof__header">
+        <h2>Coaches who've been there</h2>
+      </div>
+      <div class="social-proof__grid">
+        <div class="testimonial">
+          <p class="testimonial__quote">I went from 10 to 30 clients and didn't have to switch tools or double my subscription.</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">SM</div>
+            <div>
+              <div class="testimonial__name">Sarah M.</div>
+              <div class="testimonial__role">Online strength coach</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial__quote">The check-in system alone saved me 4 hours a week. I actually look forward to Mondays now.</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">MT</div>
+            <div>
+              <div class="testimonial__name">Marcus T.</div>
+              <div class="testimonial__role">Hybrid coach</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial">
+          <p class="testimonial__quote">Finally software that doesn't feel like it was built for a gym chain.</p>
+          <div class="testimonial__author">
+            <div class="testimonial__avatar">JL</div>
+            <div>
+              <div class="testimonial__name">Jenna L.</div>
+              <div class="testimonial__role">Online-only coach</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="social-proof__counter">
+        <div class="social-proof__counter-number">500+</div>
+        <div class="social-proof__counter-text">coaches already on the waitlist</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="container">
+      <div class="final-cta__content">
+        <h2 class="final-cta__title">Stop running your business from a spreadsheet.</h2>
+        <p class="final-cta__subtitle">2 weeks free when we launch. No credit card required.</p>
+        <form class="email-form" style="margin: 0 auto;" onsubmit="event.preventDefault(); alert('Thanks for claiming your spot!');">
+          <input type="email" class="email-form__input" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn--primary">Claim your spot</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__logo">FitDesk</div>
+        <div class="footer__links">
+          <a href="#" class="footer__link">Privacy</a>
+          <a href="#" class="footer__link">Terms</a>
+          <a href="#" class="footer__link">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
